@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FEMBOTS | Slot Game Provider</title>
+  <meta name="description" content="FEMBOTS is an independent slot provider making bold, art-first games for Engine and Stake. Our first game is Midnight Broker." />
+  <meta name="theme-color" content="#09090d" />
+  <link rel="icon" type="image/svg+xml" href="assets/robot.svg" />
+  <meta property="og:title" content="FEMBOTS | Slot Game Provider" />
+  <meta property="og:description" content="Bold, art-first slots for Engine and Stake. First up: Midnight Broker." />
+  <meta property="og:image" content="assets/mb/cover-wide.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=38" />
+</head>
+<body>
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="top">
+    <a class="brand" href="#top" aria-label="FEMBOTS home">
+      <span>FEMBOTS</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#top">Home</a>
+      <a href="#games">Games</a>
+      <a href="#about">Studio</a>
+      <a href="#spotlight">Spotlight</a>
+      <a href="#contact">Partners</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="grid-lines"></div>
+        <div class="glow"></div>
+      </div>
+      <div class="hero-inner">
+        <!-- The FEMBOTS robot. main.js moves the pupil to follow the mouse and blinks the lid. -->
+        <svg class="hero-bot" id="heroBot" aria-hidden="true" viewBox="6 0 188 180">
+          <defs>
+            <clipPath id="hb-eye"><ellipse cx="100" cy="108" rx="43.5" ry="51"/></clipPath>
+            <mask id="hb-cut" maskUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="220">
+              <rect x="-10" y="-10" width="220" height="220" fill="#fff"/>
+              <g clip-path="url(#hb-eye)"><g class="hero-pupil"><ellipse cx="103" cy="112.5" rx="22.5" ry="27" fill="#000"/><ellipse cx="94.45" cy="101.4" rx="8.25" ry="9.75" fill="#fff"/><ellipse cx="110.95" cy="122.4" rx="4.2" ry="4.8" fill="#fff"/></g><g class="hero-lid"><path d="M39.1 -45H160.9V82.5Q100 109.02 39.1 82.5Z" fill="#fff"/><path d="M39.1 82.5Q100 109.02 160.9 82.5" fill="none" stroke="#000" stroke-width="3.9"/></g></g>
+              <ellipse cx="100" cy="108" rx="46" ry="53.5" fill="none" stroke="#000" stroke-width="5.5"/>
+            </mask>
+          </defs>
+          <g fill="#fff" mask="url(#hb-cut)"><rect x="96.5" y="20" width="7" height="20" rx="3.5"/><circle cx="100" cy="15" r="10"/><rect x="12" y="84" width="14" height="44" rx="7"/><rect x="174" y="84" width="14" height="44" rx="7"/><rect x="30" y="36" width="140" height="138" rx="44"/></g>
+        </svg>
+        <h1 class="wordmark reveal" aria-label="FEMBOTS">
+          <span class="glitch">FEMBOTS</span>
+        </h1>
+        <p class="hero-sub reveal">
+          An independent slot provider making games for Stake Engine. Three titles are in production now, each with its own characters, art and math.
+        </p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#games">See our games</a>
+          <a class="btn btn-ghost" href="#about">Who we are</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#studio-stats" aria-label="Scroll to the provider stats"><span></span></a>
+    </section>
+
+
+    <!-- ============ TICKER ============ -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>FEMBOTS</span><b>3 games in production</b><span>Ember Reign</span><span>Midnight Broker</span><span>Noble Seal</span><b>Built on Engine</b><b>Played on Stake</b>
+        <span>FEMBOTS</span><b>3 games in production</b><span>Ember Reign</span><span>Midnight Broker</span><span>Noble Seal</span><b>Built on Engine</b><b>Played on Stake</b>
+      </div>
+    </div>
+
+    <!-- ============ STUDIO STATS ============ -->
+    <section class="stats" id="studio-stats" aria-label="FEMBOTS in numbers">
+      <div class="stat reveal"><b data-count-games>3</b><span>Games in production</span></div>
+      <div class="stat reveal"><b>Engine</b><span>Where we publish</span></div>
+      <div class="stat reveal"><b>Stake</b><span>Where our games are played</span></div>
+    </section>
+
+    <!-- ============ GAMES ============ -->
+    <section class="section games" id="games">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Catalogue</p>
+          <h2>Our games</h2>
+        </div>
+        <div class="filters" role="tablist" aria-label="Filter games">
+          <button class="filter is-active" data-filter="all" role="tab" aria-selected="true">All <i data-count="all">0</i></button>
+          <button class="filter" data-filter="released" role="tab" aria-selected="false">Released <i data-count="released">0</i></button>
+          <button class="filter" data-filter="coming-soon" role="tab" aria-selected="false">Coming soon <i data-count="coming-soon">0</i></button>
+        </div>
+      </div>
+      <div class="game-grid" id="gameGrid"></div>
+      <p class="empty" id="gamesEmpty" hidden>Our first release is on its way. Check back soon.</p>
+    </section>
+
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about">
+      <div class="about-head">
+        <p class="eyebrow">Who we are</p>
+        <h2>Small studio.<br /><span class="outline">Loud games.</span></h2>
+        <p class="lead">
+          FEMBOTS is an independent slot provider. We make a small number of games and put a lot into each one: original characters, animation that feels good on every spin, and math that is simulated and tuned before anyone plays.
+        </p>
+      </div>
+      <div class="pillars">
+        <article class="pillar reveal">
+          <span class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5 19 5a2.1 2.1 0 0 0-3-3l-9.5 9.5"/><path d="M6.5 11.5c-2 0-3.5 1.6-3.5 3.6 0 1.6-.6 2.8-2 3.4 1 .9 2.6 1.5 4.3 1.5 3 0 5.2-2.2 5.2-5 0-1.9-1.6-3.5-4-3.5Z"/></svg></span>
+          <h3>Art first</h3>
+          <p>Every game starts with a world and a character. Symbols are cut and rigged so they move and land with weight.</p>
+        </article>
+        <article class="pillar reveal">
+          <span class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M6 17c2.5 0 3-10 6-10s3.5 10 6 10"/><path d="M12 7v10" stroke-dasharray="1.5 2.5"/></svg></span>
+          <h3>Simulated math</h3>
+          <p>Our games are built on Stake Engine's official Math SDK, and every mode is simulated and tuned to its published RTP before release.</p>
+        </article>
+        <article class="pillar reveal">
+          <span class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M12 3v18M18 3v18"/><rect x="4" y="13" width="4" height="3" rx="1" fill="currentColor"/><rect x="10" y="6" width="4" height="3" rx="1" fill="currentColor"/><rect x="16" y="10" width="4" height="3" rx="1" fill="currentColor"/></svg></span>
+          <h3>Mixed sound</h3>
+          <p>Music and sound effects are mixed and mastered for phones and desktops, so wins sound big without wearing you out.</p>
+        </article>
+        <article class="pillar reveal">
+          <span class="pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 15H4a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 4 4h13a1.5 1.5 0 0 1 1.5 1.5V9"/><path d="M7 19h6M10 15v4"/><rect x="15.5" y="11" width="6" height="10" rx="1.5"/><path d="M18 18.5h1"/></svg></span>
+          <h3>Phone and desktop</h3>
+          <p>Our games play in the browser on phones and desktops, wherever Stake runs.</p>
+        </article>
+      </div>
+      <div class="platforms">
+        <span>Built on</span><b>Engine</b><span class="dot">•</span><span>Played on</span><b>Stake</b>
+      </div>
+    </section>
+
+
+    <!-- ============ SPOTLIGHT ============ -->
+    <section class="section spotlight" id="spotlight">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Spotlight</p>
+          <h2>Up next</h2>
+        </div>
+      </div>
+      <article class="spot-card" id="midnight-broker">
+        <div class="spot-art">
+          <img src="assets/mb/cover-tall.webp" alt="The Night Broker, a masked ghost with a katana, in front of red lanterns" loading="lazy" />
+        </div>
+        <div class="spot-body">
+          <span class="tag tag-soon">Coming soon</span>
+          <img class="spot-logo" src="assets/mb/logo.webp" alt="Midnight Broker" loading="lazy" />
+          <p class="spot-lead">A 5×4 cluster slot in a lantern-lit night market. Every win lights its cells, and when the Night Broker lands, every lit lantern flips open for cash or a multiplier.</p>
+          <ul class="stat-chips">
+            <li><b>96.70%</b><span>RTP</span></li>
+            <li><b>10,000x</b><span>Max win</span></li>
+            <li><b>5×4</b><span>Cluster pays</span></li>
+            <li><b>7</b><span>Game modes</span></li>
+          </ul>
+          <ol class="mini-steps">
+            <li><b>Light the cells.</b> Winning clusters light the cells they sat on.</li>
+            <li><b>The Broker collects.</b> Lit lanterns reveal 0.2x to 500x, or ×2 and ×3 multipliers.</li>
+            <li><b>Break the seals.</b> 3, 4 or 5 Seals open the Regular, Super or Hidden bonus.</li>
+          </ol>
+        </div>
+      </article>
+      <details class="game-details">
+        <summary>Full game details <span aria-hidden="true">+</span></summary>
+        <div class="game-details-body">
+      <!-- Symbols -->
+      <h3 class="sub">The symbols</h3>
+      <ul class="symbols">
+        <li><img src="assets/mb/H4_tessen.webp" alt="" loading="lazy" /><span>War Fan</span><small>up to 75x</small></li>
+        <li><img src="assets/mb/H3_katana.webp" alt="" loading="lazy" /><span>Katana</span><small>up to 40x</small></li>
+        <li><img src="assets/mb/H2_bonsai.webp" alt="" loading="lazy" /><span>Bonsai</span><small>up to 25x</small></li>
+        <li><img src="assets/mb/H1_crane.webp" alt="" loading="lazy" /><span>Crane</span><small>up to 15x</small></li>
+        <li class="special"><img src="assets/mb/W_chest.webp" alt="" loading="lazy" /><span>Treasure Chest</span><small>Wild</small></li>
+        <li class="special"><img src="assets/mb/token_lantern_gold.webp" alt="" loading="lazy" /><span>Gold Lantern</span><small>Multiplier</small></li>
+      </ul>
+
+      <!-- Bonuses + modes -->
+      <div class="two-col">
+        <div>
+          <h3 class="sub">Bonus rounds</h3>
+          <div class="bonus-list">
+            <article class="bonus">
+              <div class="bonus-seals"><b>3</b><span>Seals</span></div>
+              <div><h4>Regular Bonus</h4><p>8 spins. Lit cells stay lit for the whole bonus. 3 Seals add 4 more spins.</p></div>
+            </article>
+            <article class="bonus">
+              <div class="bonus-seals"><b>4</b><span>Seals</span></div>
+              <div><h4>Super Bonus</h4><p>10 spins with 6 cells lit from the start, and every collection pays at least ×3.</p></div>
+            </article>
+            <article class="bonus bonus-hidden">
+              <div class="bonus-seals"><b>5</b><span>Seals</span></div>
+              <div><h4>Hidden Bonus</h4><p>10 spins with 4 cells lit from the start. Reached only with 5 Seals or from a Mystery Bonus.</p></div>
+            </article>
+          </div>
+        </div>
+        <div>
+          <h3 class="sub">Game modes</h3>
+          <table class="modes">
+            <thead><tr><th>Mode</th><th>Cost</th></tr></thead>
+            <tbody>
+              <tr><td>Base game</td><td>1x</td></tr>
+              <tr><td>Extra Chance <small>Bonuses about 1.7× as often</small></td><td>1.25x</td></tr>
+              <tr><td>Feature Spins <small>The Broker on every board, 2 cells lit</small></td><td>5x</td></tr>
+              <tr><td>Moonlit Spins <small>All 20 cells lit, every collect at least ×10</small></td><td>500x</td></tr>
+              <tr><td>Regular Bonus</td><td>100x</td></tr>
+              <tr><td>Mystery Bonus <small>Regular, Super or Hidden</small></td><td>200x</td></tr>
+              <tr><td>Super Bonus</td><td>400x</td></tr>
+            </tbody>
+          </table>
+          <p class="fine">Figures are from the current math build and may change before release. Some modes are not available in every jurisdiction.</p>
+        </div>
+      </div>
+        </div>
+      </details>
+    </section>
+
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <div class="contact-card">
+        <img class="contact-bot" src="assets/robot.svg" alt="" loading="lazy" />
+        <div>
+          <p class="eyebrow">Operators and partners</p>
+          <h2>Want FEMBOTS games on your platform?</h2>
+          <p>Our games are distributed through Engine. Operators can get them through Engine Integration.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://engine.io/" target="_blank" rel="noopener">Engine Integration</a>
+            <a class="btn btn-ghost" id="contactEmail" hidden>Email us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <a class="brand" href="#top"><img src="assets/robot.svg" alt="" width="28" height="27" /><span>FEMBOTS</span></a>
+      <nav>
+        <a href="#games">Games</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <p class="footer-note">
+      <span class="age">18+</span>
+      Our games are for adults only. Play responsibly, and only where gambling is legal for you.
+    </p>
+    <p class="footer-copy">© <span id="year">2026</span> FEMBOTS. All rights reserved.</p>
+  </footer>
+
+  <script src="games.js?v=38"></script>
+  <script src="main.js?v=38"></script>
+</body>
+</html>
