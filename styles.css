@@ -146,7 +146,6 @@ em { color: var(--gold); font-style: normal; font-weight: 700; }
 .stat span { display: block; margin-top: 10px; font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
 
 /* ---------- Spotlight ---------- */
-.spotlight { padding-top: 0; }
 .spot-card {
   display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); overflow: hidden;
   border-radius: 24px; background: var(--panel); border: 1px solid var(--line);
@@ -197,7 +196,7 @@ em { color: var(--gold); font-style: normal; font-weight: 700; }
 .stat-chips span { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); font-weight: 700; }
 
 /* ---------- Sections ---------- */
-.section { max-width: var(--wrap); margin: 0 auto; padding: clamp(72px, 10vw, 130px) clamp(16px, 4vw, 48px); }
+.section { max-width: var(--wrap); margin: 0 auto; padding: clamp(36px, 4.5vw, 60px) clamp(16px, 4vw, 48px); }
 .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
 
 /* ---------- Games ---------- */
