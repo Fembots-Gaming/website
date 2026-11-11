@@ -249,6 +249,13 @@
       </article>`;
   };
 
+  // Each card's info panel and logo heights, so CSS can place the logo clear of the panel (see .card-logo).
+  const infoSize = new ResizeObserver((entries) => {
+    entries.forEach((e) => {
+      const el = e.target;
+      el.closest('.game-card').style.setProperty(el.classList.contains('card-info') ? '--info-h' : '--logo-h', `${Math.ceil(el.offsetHeight)}px`);
+    });
+  });
   const render = (filter) => {
     const list = filter === 'all' ? games : games.filter((g) => g.status === filter);
     // A "next game" teaser keeps a short catalogue from looking empty.
@@ -256,6 +263,9 @@
       ? `<div class="lab-card"><img src="assets/robot.svg" alt="" /><b>Next game</b><p>Something new is being built in the lab.</p></div>`
       : '';
     grid.innerHTML = list.map(card).join('') + lab;
+    grid.querySelectorAll('.game-card').forEach((c) => {
+      c.querySelectorAll('.card-info, .card-logo').forEach((el) => infoSize.observe(el));
+    });
     empty.hidden = list.length > 0;
   };
 

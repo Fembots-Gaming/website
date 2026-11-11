@@ -292,7 +292,18 @@ html:has(.game-modal[open]) { overflow: hidden; }
 .game-card:hover > img.cover { transform: scale(1.06); filter: brightness(.55); }
 .game-card .tag { position: absolute; top: 14px; right: 14px; }
 .game-card .card-logo { position: absolute; left: 50%; bottom: 18px; width: 82%; transform: translateX(-50%); filter: drop-shadow(0 8px 16px rgba(0,0,0,.8)); transition: bottom .35s ease; }
-.game-card:hover .card-logo { bottom: calc(100% - 46%); }
+/* On hover the logo rises to 54% up the card, higher only if this card's info panel (--info-h, set by main.js)
+   would reach it, and never so high that its top (--logo-h) leaves the card. */
+.game-card { container-type: inline-size; }
+.game-card:hover .card-logo { bottom: min(calc(100% - var(--logo-h, 0px) - 12px), max(54%, calc(var(--info-h, 0px) + 10px))); }
+/* Narrow cards: a shorter info panel and a slightly smaller logo, so both fit. */
+@container (max-width: 300px) {
+  .card-info { padding: 14px; }
+  .card-info dl { gap: 4px; margin-bottom: 8px; }
+  .card-info dd { font-size: .82rem; white-space: nowrap; }
+  .card-info p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; margin-bottom: 10px; }
+  .game-card .card-logo { width: 72%; }
+}
 .game-card h3.card-logo { font-family: var(--display); font-weight: 400; font-size: 1.8rem; text-align: center; }
 /* Games without art yet get a stand-in cover (big mascot on a violet grid) and behave
    exactly like a real cover: the art dims and zooms on hover while the title rises. */
@@ -480,7 +491,7 @@ html:has(.game-modal[open]) { overflow: hidden; }
 @media (hover: none) {
   .game-card .card-info { transform: none; }
   .game-card > img.cover { filter: brightness(.7); }
-  .game-card .card-logo { bottom: calc(100% - 46%); }
+  .game-card .card-logo { bottom: min(calc(100% - var(--logo-h, 0px) - 12px), max(54%, calc(var(--info-h, 0px) + 10px))); }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-bot { animation: none; }
