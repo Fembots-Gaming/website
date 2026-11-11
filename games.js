@@ -18,6 +18,8 @@ window.FEMBOTS = {
       slug: 'midnight-broker',
       title: 'Midnight Broker',
       status: 'coming-soon', // 'released' or 'coming-soon'
+      // true while it is submitted on Engine and waiting for approval. Only these show under "Up next".
+      inReview: true,
       release: 'Coming soon',
       cover: 'assets/mb/cover-tall.webp',
       coverWide: 'assets/mb/cover-wide.webp',
@@ -31,24 +33,33 @@ window.FEMBOTS = {
       modes: 7,
       playUrl: '', // set once it is live on Stake
     },
-    // Ember Reign and Noble Seal are on Engine (team "fembots") but have no art or
-    // details in this folder yet. Add cover, logo, blurb, rtp, maxWin and grid when ready.
+    // Noble Seal's numbers are copied from its rules panel and math
+    // (noble-seal/src/game/rules.ts, game.config.json and math/games/noble-seal/game_config.py).
+    {
+      slug: 'noble-seal',
+      title: 'Noble Seal',
+      status: 'coming-soon',
+      inReview: true,
+      release: 'Coming soon',
+      cover: 'assets/ns/cover-tall.webp',
+      logo: 'assets/ns/logo.webp',
+      tagline: 'Royal Seals fill the reels.',
+      blurb:
+        'A 6×5 lines slot in a storybook market town. Royal Seals fill whole reels with wilds and multipliers up to 1000x, and in free spins they stick and grow.',
+      rtp: '96.70%',
+      maxWin: '50,000x',
+      grid: '6×5 Lines',
+      modes: 8,
+      playUrl: '',
+    },
+    // Ember Reign is on Engine (team "fembots") but has no art or details in this
+    // folder yet. Add cover, logo, blurb, rtp, maxWin and grid when ready.
     {
       slug: 'ember-reign',
       title: 'Ember Reign',
       status: 'coming-soon',
       release: 'Coming soon',
       blurb: 'Our next game on Engine. Details soon.',
-      detailsAnchor: false,
-      playUrl: '',
-    },
-    {
-      slug: 'noble-seal',
-      title: 'Noble Seal',
-      status: 'coming-soon',
-      release: 'Coming soon',
-      blurb: 'Our next game on Engine. Details soon.',
-      detailsAnchor: false,
       playUrl: '',
     },
   ],

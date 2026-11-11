@@ -29,6 +29,7 @@
     const target = hash === '#top' || hash === '#' ? null : document.querySelector(hash);
     if (hash !== '#top' && hash !== '#' && !target) return;
     e.preventDefault();
+    if (target) showGameFor(target, false);  // a link to a game's details switches the spotlight to that game
     // The nav loses 12px of padding once the page scrolls, so aim for its scrolled height.
     const navH = nav.classList.contains('scrolled') ? nav.offsetHeight : nav.offsetHeight - 12;
     const top = target ? target.getBoundingClientRect().top + window.scrollY - navH : 0;
@@ -36,6 +37,51 @@
     history.replaceState(null, '', hash === '#top' ? location.pathname + location.search : hash);
     setMenu(false);
   });
+
+  // ---------- Spotlight: one game at a time ----------
+  // The arrows step through the games, wrapping round at the ends.
+  // Only games marked inReview in games.js show here; with none, the section and its nav link hide.
+  const inReview = new Set(games.filter((g) => g.inReview).map((g) => g.slug));
+  const gamePanels = [...document.querySelectorAll('.spot-game')].filter((p) => inReview.has(p.dataset.game) || (p.classList.add('off'), false));
+  const spotlight = document.getElementById('spotlight');
+  const spotNav = document.querySelector('.spot-nav');
+  const spotCount = spotNav && spotNav.querySelector('.spot-count');
+  if (spotlight && !gamePanels.length) {
+    spotlight.hidden = true;
+    document.querySelectorAll('a[href="#spotlight"]').forEach((a) => { a.hidden = true; });
+  }
+  if (spotNav && gamePanels.length < 2) spotNav.hidden = true;
+  let spotIndex = 0;
+  const showIndex = (i, dir = 0) => {
+    if (!gamePanels.length) return;
+    spotIndex = (i + gamePanels.length) % gamePanels.length;
+    const panel = gamePanels[spotIndex];
+    const changed = panel.classList.contains('is-hidden');
+    // The others stay in the layout (so the box keeps the tallest game's height) but invisible and unfocusable.
+    gamePanels.forEach((p) => {
+      const off = p !== panel;
+      p.classList.toggle('is-hidden', off);
+      p.inert = off;
+      p.setAttribute('aria-hidden', String(off));
+    });
+    if (spotCount) spotCount.innerHTML = `<b>${spotIndex + 1}</b> / <span>${gamePanels.length}</span>`;
+    if (changed && dir && !reduceMotion.matches) {
+      panel.animate({ opacity: [0, 1], transform: [`translateX(${dir * 40}px)`, 'none'] }, { duration: 420, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+    }
+  };
+  const showGame = (slug, animate = true) => {
+    const i = gamePanels.findIndex((p) => p.dataset.game === slug);
+    if (i >= 0) showIndex(i, animate ? 1 : 0);
+  };
+  // Switches to the game that contains an element, such as a "#noble-seal" link's target.
+  function showGameFor(el, animate) {
+    const panel = el.closest && el.closest('.spot-game');
+    if (panel) showGame(panel.dataset.game, animate);
+  }
+  if (spotNav) spotNav.querySelectorAll('.spot-arrow').forEach((btn) => {
+    btn.addEventListener('click', () => { const d = Number(btn.dataset.dir); showIndex(spotIndex + d, d); });
+  });
+  showIndex(0);
 
   // ---------- Hero robot: the eye follows the mouse, blinks, and looks around when the mouse is still ----------
   const bot = document.getElementById('heroBot');
@@ -86,6 +132,93 @@
     }).observe(bot);
   }
 
+  // ---------- Ticker ----------
+  // The track scrolls left by half its width, then jumps back, so each half must be at least as wide
+  // as the screen or a gap shows before the jump. Repeat the items until it is, and stretch the
+  // duration with it so the speed stays the same.
+  const track = document.querySelector('.ticker-track');
+  if (track) {
+    const items = [...track.children].slice(0, track.children.length / 2).map((n) => n.cloneNode(true));
+    const SECONDS_PER_COPY = 30;
+    let reps = 0;
+    const fill = () => {
+      const copies = track.children.length / items.length;
+      const copyW = track.getBoundingClientRect().width / copies;
+      if (!copyW) return;
+      const need = Math.max(1, Math.ceil(track.parentElement.clientWidth / copyW));
+      if (need * 2 === copies) return;
+      reps = need;
+      const nodes = [];
+      for (let i = 0; i < reps * 2; i++) items.forEach((n) => nodes.push(n.cloneNode(true)));
+      track.replaceChildren(...nodes);
+      track.style.animationDuration = `${SECONDS_PER_COPY * reps}s`;
+    };
+    fill();
+    if (document.fonts) document.fonts.ready.then(fill);
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(fill, 150); });
+  }
+
+  // ---------- Game details pop-up ----------
+  // Opened from a game card or a spotlight "Full game details" button. It shows the game's spotlight card
+  // (art, logo, stats) and then the full details from its <template id="details-SLUG">.
+  const modal = document.getElementById('gameModal');
+  const modalBody = modal && modal.querySelector('.modal-body');
+  const hasDetails = (slug) => !!document.getElementById(`details-${slug}`);
+  let lastFocus = null;
+  const openDetails = (slug, fromKey = false) => {
+    const tpl = document.getElementById(`details-${slug}`);
+    if (!modal || !tpl) return;
+    const head = document.getElementById(slug);
+    modalBody.replaceChildren();
+    if (head) {
+      const card = head.cloneNode(true);
+      card.removeAttribute('id');
+      card.querySelectorAll('[data-details]').forEach((b) => b.remove());  // the pop-up is already open
+      card.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+      modalBody.append(card);
+    }
+    modalBody.append(tpl.content.cloneNode(true));
+    const game = games.find((g) => g.slug === slug);
+    modal.setAttribute('aria-label', `${game ? game.title : 'Game'} details`);
+    modal.querySelector('.modal-title').innerHTML = `<b>${esc(game ? game.title : 'Game')}</b> &middot; Game details`;
+    // Focus goes back to the card only for keyboard users; after a click it would leave the card's info panel up.
+    lastFocus = fromKey ? document.activeElement : null;
+    modal.showModal();
+    modal.scrollTop = 0;
+    if (!reduceMotion.matches) {
+      modal.animate({ opacity: [0, 1], transform: ['translateY(24px) scale(.97)', 'none'] }, { duration: 380, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+      [...modalBody.children].forEach((el, i) => el.animate({ opacity: [0, 1], transform: ['translateY(14px)', 'none'] },
+        { duration: 420, delay: 90 + i * 60, easing: 'cubic-bezier(.2, .8, .2, 1)', fill: 'backwards' }));
+      modalBody.querySelectorAll('.symbols li').forEach((li, i) => li.animate({ opacity: [0, 1], transform: ['translateY(18px) scale(.92)', 'none'] },
+        { duration: 420, delay: 220 + i * 55, easing: 'cubic-bezier(.3, 1.4, .5, 1)', fill: 'backwards' }));
+    }
+  };
+  const closeDetails = () => {
+    if (!modal || !modal.open) return;
+    if (reduceMotion.matches) { modal.close(); return; }
+    const anim = modal.animate({ opacity: [1, 0], transform: ['none', 'translateY(16px) scale(.98)'] }, { duration: 200, easing: 'ease-in' });
+    anim.onfinish = () => modal.close();
+  };
+  if (modal) {
+    modal.querySelector('.modal-close').addEventListener('click', closeDetails);
+    // A click on the dimmed backdrop (the dialog itself, outside its content) closes it.
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeDetails(); });
+    modal.addEventListener('cancel', (e) => { e.preventDefault(); closeDetails(); });
+    modal.addEventListener('close', () => {
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      else if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-details]');
+    if (btn && !modal.contains(btn)) openDetails(btn.dataset.details);
+  });
+  document.addEventListener('keydown', (e) => {
+    const card = e.target.closest && e.target.closest('.game-card[data-details]');
+    if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openDetails(card.dataset.details, true); }
+  });
+
   // ---------- Games grid ----------
   const grid = document.getElementById('gameGrid');
   const empty = document.getElementById('gamesEmpty');
@@ -95,8 +228,8 @@
     const live = g.status === 'released';
     const link = live && g.playUrl
       ? `<a href="${esc(g.playUrl)}" target="_blank" rel="noopener">Play now →</a>`
-      : g.detailsAnchor !== false
-        ? `<a href="#${esc(g.slug)}">Game details →</a>`
+      : hasDetails(g.slug)
+        ? '<span class="card-more">Game details →</span>'
         : '';
     const facts = [
       g.rtp && `<div><dt>RTP</dt><dd>${esc(g.rtp)}</dd></div>`,
@@ -104,7 +237,7 @@
       g.grid && `<div><dt>Grid</dt><dd>${esc(g.grid)}</dd></div>`,
     ].filter(Boolean).join('');
     return `
-      <article class="game-card${g.cover ? '' : ' no-cover'}" data-status="${esc(g.status)}" tabindex="0">
+      <article class="game-card${g.cover ? '' : ' no-cover'}" data-status="${esc(g.status)}" tabindex="0"${hasDetails(g.slug) ? ` data-details="${esc(g.slug)}" role="button" aria-label="${esc(g.title)} details"` : ''}>
         ${g.cover ? `<img class="cover" src="${esc(g.cover)}" alt="" loading="lazy" />` : ''}
         <span class="tag ${live ? 'tag-live' : 'tag-soon'}">${live ? 'Out now' : esc(g.release || 'Coming soon')}</span>
         ${g.logo ? `<img class="card-logo" src="${esc(g.logo)}" alt="${esc(g.title)}" loading="lazy" />` : `<h3 class="card-logo">${esc(g.title)}</h3>`}
@@ -130,9 +263,9 @@
     const f = el.dataset.count;
     el.textContent = f === 'all' ? games.length : games.filter((g) => g.status === f).length;
   });
-  document.querySelectorAll('.filter').forEach((btn) => {
+  document.querySelectorAll('.filter[data-filter]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter').forEach((b) => {
+      document.querySelectorAll('.filter[data-filter]').forEach((b) => {
         b.classList.toggle('is-active', b === btn);
         b.setAttribute('aria-selected', String(b === btn));
       });

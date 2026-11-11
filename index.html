@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=39" />
+  <link rel="stylesheet" href="styles.css?v=63" />
 </head>
 <body>
   <!-- ============ NAV ============ -->
@@ -145,7 +145,15 @@
           <p class="eyebrow">Spotlight</p>
           <h2>Up next</h2>
         </div>
+        <div class="spot-nav" aria-label="Browse games">
+          <button class="spot-arrow" type="button" data-dir="-1" aria-label="Previous game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <span class="spot-count" aria-live="polite"><b>1</b> / <span>2</span></span>
+          <button class="spot-arrow" type="button" data-dir="1" aria-label="Next game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
       </div>
+      <!-- Both games sit in one grid cell, so the box is always as tall as the tallest game. -->
+      <div class="spot-stack">
+      <div class="spot-game" data-game="midnight-broker">
       <article class="spot-card" id="midnight-broker">
         <div class="spot-art">
           <img src="assets/mb/cover-tall.webp" alt="The Night Broker, a masked ghost with a katana, in front of red lanterns" loading="lazy" />
@@ -165,11 +173,70 @@
             <li><b>The Broker collects.</b> Lit lanterns reveal 0.2x to 500x, or ×2 and ×3 multipliers.</li>
             <li><b>Break the seals.</b> 3, 4 or 5 Seals open the Regular, Super or Hidden bonus.</li>
           </ol>
+          <button class="details-btn" type="button" data-details="midnight-broker" aria-label="Full game details" title="Full game details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="out-a" d="M14 4h6v6M20 4l-6 6"/><path class="out-b" d="M10 20H4v-6M4 20l6-6"/></svg></button>
         </div>
       </article>
-      <details class="game-details">
-        <summary>Full game details <span aria-hidden="true">+</span></summary>
-        <div class="game-details-body">
+      </div>
+
+      <!-- Noble Seal (figures from noble-seal/src/game/rules.ts and its math) -->
+      <div class="spot-game is-hidden" data-game="noble-seal">
+      <article class="spot-card" id="noble-seal">
+        <div class="spot-art">
+          <img src="assets/ns/cover-tall.webp" alt="A seal in a knight's helmet and red cape, raising a sword over a market town at sunset" loading="lazy" />
+        </div>
+        <div class="spot-body">
+          <span class="tag tag-soon">Coming soon</span>
+          <img class="spot-logo" src="assets/ns/logo.webp" alt="Noble Seal" loading="lazy" />
+          <p class="spot-lead">A 6×5 lines slot in a storybook market town. Royal Seals fill whole reels with wilds and multipliers up to 1000x, and in free spins they stick and grow every spin.</p>
+          <ul class="stat-chips">
+            <li><b>96.70%</b><span>RTP</span></li>
+            <li><b>50,000x</b><span>Max win</span></li>
+            <li><b>25</b><span>Paylines</span></li>
+            <li><b>8</b><span>Game modes</span></li>
+          </ul>
+          <ol class="mini-steps">
+            <li><b>Line up 3 or more.</b> 3 to 6 of a symbol on a line, from the first reel, pay.</li>
+            <li><b>Land a Royal Seal.</b> It fills its reel with wilds and a 2x to 1000x multiplier. Lines through several add them up.</li>
+            <li><b>Collect FS scatters.</b> 3, 4 or 5 and more start the Royal, Super or Epic bonus.</li>
+          </ol>
+          <button class="details-btn" type="button" data-details="noble-seal" aria-label="Full game details" title="Full game details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="out-a" d="M14 4h6v6M20 4l-6 6"/><path class="out-b" d="M10 20H4v-6M4 20l6-6"/></svg></button>
+        </div>
+      </article>
+      </div>
+      </div>
+    </section>
+
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <div class="contact-card">
+        <img class="contact-bot" src="assets/robot.svg" alt="" loading="lazy" />
+        <div>
+          <p class="eyebrow">Operators and partners</p>
+          <h2>Want FEMBOTS games on your platform?</h2>
+          <p>Our games are distributed through Engine. Operators can get them through Engine Integration.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://engine.io/" target="_blank" rel="noopener">Engine Integration</a>
+            <a class="btn btn-ghost" id="contactEmail" hidden>Email us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Game details pop-up. main.js fills it from the game's spotlight card and its template below. -->
+  <dialog class="game-modal" id="gameModal" aria-label="Game details">
+    <div class="modal-top">
+      <span class="modal-title"></span>
+      <button class="modal-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body"></div>
+  </dialog>
+
+  <!-- Full details for each game, shown in the pop-up. -->
+  <template id="details-midnight-broker">
       <!-- Symbols -->
       <h3 class="sub">The symbols</h3>
       <ul class="symbols">
@@ -217,27 +284,56 @@
           <p class="fine">Figures are from the current math build and may change before release. Some modes are not available in every jurisdiction.</p>
         </div>
       </div>
-        </div>
-      </details>
-    </section>
+  </template>
+  <template id="details-noble-seal">
+      <h3 class="sub">The symbols</h3>
+      <ul class="symbols">
+        <li><img src="assets/ns/H1.webp" alt="" loading="lazy" /><span>Crown</span><small>up to 30x</small></li>
+        <li><img src="assets/ns/H2.webp" alt="" loading="lazy" /><span>Knight's Helmet</span><small>up to 24x</small></li>
+        <li><img src="assets/ns/H3.webp" alt="" loading="lazy" /><span>Golden Chalice</span><small>up to 20x</small></li>
+        <li><img src="assets/ns/H4.webp" alt="" loading="lazy" /><span>Fleur-de-lis Shield</span><small>up to 16x</small></li>
+        <li class="special"><img src="assets/ns/W.webp" alt="" loading="lazy" /><span>Treasure Chest</span><small>Wild</small></li>
+        <li class="special"><img src="assets/ns/seal.webp" alt="" loading="lazy" /><span>Royal Seal</span><small>Wild reel, up to 1000x</small></li>
+      </ul>
 
-
-    <!-- ============ CONTACT ============ -->
-    <section class="section contact" id="contact">
-      <div class="contact-card">
-        <img class="contact-bot" src="assets/robot.svg" alt="" loading="lazy" />
+      <div class="two-col">
         <div>
-          <p class="eyebrow">Operators and partners</p>
-          <h2>Want FEMBOTS games on your platform?</h2>
-          <p>Our games are distributed through Engine. Operators can get them through Engine Integration.</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="https://engine.io/" target="_blank" rel="noopener">Engine Integration</a>
-            <a class="btn btn-ghost" id="contactEmail" hidden>Email us</a>
+          <h3 class="sub">Bonus rounds</h3>
+          <div class="bonus-list">
+            <article class="bonus">
+              <div class="bonus-seals"><b>3</b><span>FS</span></div>
+              <div><h4>Royal Seal Spins</h4><p>10 free spins on a clear board. Royal Seals that land stick to their reels and grow +1 every spin.</p></div>
+            </article>
+            <article class="bonus">
+              <div class="bonus-seals"><b>4</b><span>FS</span></div>
+              <div><h4>Super Royal Seal Spins</h4><p>12 free spins, starting with a Royal Seal locked in place.</p></div>
+            </article>
+            <article class="bonus bonus-hidden">
+              <div class="bonus-seals"><b>5+</b><span>FS</span></div>
+              <div><h4>Epic Royal Seal Spins</h4><p>12 free spins, starting with 2 Royal Seals locked in place.</p></div>
+            </article>
           </div>
+          <p class="fine">3 or more FS scatters during a bonus add 5 more free spins.</p>
+        </div>
+        <div>
+          <h3 class="sub">Game modes</h3>
+          <table class="modes">
+            <thead><tr><th>Mode</th><th>Cost</th></tr></thead>
+            <tbody>
+              <tr><td>Base game</td><td>1x</td></tr>
+              <tr><td>Extra Chance <small>A much better chance of a bonus</small></td><td>3x</td></tr>
+              <tr><td>Super Chance <small>A better chance of Super or Epic</small></td><td>6x</td></tr>
+              <tr><td>Epic Chance <small>A better chance of Epic</small></td><td>20x</td></tr>
+              <tr><td>Feature Spin <small>3 Royal Seals of 10x or more on every spin</small></td><td>1000x</td></tr>
+              <tr><td>Royal Seal Spins</td><td>100x</td></tr>
+              <tr><td>Super Buy</td><td>300x</td></tr>
+              <tr><td>Mystery <small>No feature, Super or Epic</small></td><td>500x</td></tr>
+            </tbody>
+          </table>
+          <p class="fine">Figures are from the current math build and may change before release. Some modes are not available in every jurisdiction.</p>
         </div>
       </div>
-    </section>
-  </main>
+  </template>
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
@@ -256,7 +352,7 @@
     <p class="footer-copy">© <span id="year">2026</span> FEMBOTS. All rights reserved.</p>
   </footer>
 
-  <script src="games.js?v=39"></script>
-  <script src="main.js?v=39"></script>
+  <script src="games.js?v=63"></script>
+  <script src="main.js?v=63"></script>
 </body>
 </html>
