@@ -1,6 +1,11 @@
 /* ================================================================
    FEMBOTS studio site
    ================================================================ */
+/* Fonts are served from this site, not Google, so visitors' IPs aren't sent to a third party. Latin only:
+   Inter is one variable file that covers every weight. */
+@font-face { font-family: 'Bungee'; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/bungee-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/inter-latin.woff2) format('woff2'); }
+
 :root {
   --bg: #09090d;
   --bg-2: #111118;
@@ -72,8 +77,15 @@ em { color: var(--gold); font-style: normal; font-weight: 700; }
 .nav-links { display: flex; gap: clamp(18px, 3vw, 40px); }
 .nav-links a { font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); transition: color .2s; position: relative; }
 .nav-links a::after { content: ''; position: absolute; left: 0; right: 100%; bottom: -6px; height: 2px; background: var(--accent); transition: right .25s ease; }
-.nav-links a:hover { color: var(--ink); }
-.nav-links a:hover::after { right: 0; }
+/* Only one link is lit at a time. main.js sets:
+   - .is-current on the section you're looking at (it follows the scroll);
+   - .is-hover on the link the mouse has stopped on (not ones it only passes over), and .hovering on the
+     menu meanwhile, which switches the current link off until the mouse leaves the menu. */
+.nav-links a.is-current, .nav-links a.is-hover, .nav-links a:focus-visible { color: var(--ink); }
+.nav-links a.is-current::after, .nav-links a.is-hover::after, .nav-links a:focus-visible::after { right: 0; }
+.nav-links.hovering a.is-current:not(.is-hover) { color: var(--muted); }
+.nav-links.hovering a.is-current:not(.is-hover)::after { right: 100%; }
+.nav-links a:focus-visible { outline: none; }
 .nav-toggle { display: none; background: none; border: 0; width: 40px; height: 40px; cursor: pointer; position: relative; }
 .nav-toggle span { position: absolute; left: 8px; right: 8px; height: 2px; background: var(--ink); transition: transform .25s, top .25s; }
 .nav-toggle span:first-child { top: 15px; }
@@ -210,6 +222,21 @@ em { color: var(--gold); font-style: normal; font-weight: 700; }
   html { scrollbar-color: rgba(157,139,255,.4) var(--bg); }
   .game-modal { scrollbar-color: rgba(157,139,255,.4) transparent; scrollbar-width: thin; }
 }
+
+/* ---------- 18+ check ---------- */
+.age-gate {
+  width: min(460px, calc(100% - 32px)); max-width: none; margin: auto; padding: clamp(28px, 6vw, 40px) clamp(22px, 5vw, 36px);
+  border: 1px solid var(--line); border-radius: 24px; background: var(--bg-2); color: var(--ink); text-align: center;
+  box-shadow: 0 40px 120px -20px rgba(0,0,0,.8), 0 0 80px -30px rgba(157,139,255,.5);
+}
+.age-gate::backdrop { background: rgba(5,5,10,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+html:has(.age-gate[open]) { overflow: hidden; }
+.age-gate img { margin: 0 auto 18px; filter: drop-shadow(0 0 18px rgba(157,139,255,.55)); }
+.age-gate h2 { font-size: clamp(1.5rem, 6vw, 2rem); line-height: 1.1; margin-bottom: 12px; }
+.age-gate p { color: #c9c8d4; font-size: .95rem; margin-bottom: 26px; }
+.age-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.age-actions .btn { flex: 1 1 auto; padding-inline: 22px; white-space: nowrap; }
+.age-gate :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ---------- Game details pop-up ---------- */
 .game-modal {
@@ -408,9 +435,10 @@ html:has(.game-modal[open]) { overflow: hidden; }
 .pillar-icon svg { width: 22px; height: 22px; }
 .pillar h3 { font-size: 1.1rem; margin-bottom: 10px; }
 .pillar p { color: #b5b4c2; font-size: .93rem; margin: 0; }
-.platforms { margin-top: 50px; display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: center; color: var(--muted); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
-.platforms b { font-family: var(--display); font-weight: 400; color: var(--ink); font-size: 1.6rem; letter-spacing: .04em; text-transform: none; }
-.platforms .dot { color: var(--accent); margin: 0 10px; }
+/* "Built on Engine. Played on Stake." as one line, with the platform names in violet. */
+.platforms { margin: 50px auto 0; text-align: center; font-family: var(--display); font-weight: 400; font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.25; letter-spacing: .02em; color: var(--ink); }
+.platforms b { font-weight: 400; color: var(--accent); }
+.platforms span { white-space: nowrap; }  /* wraps between the two sentences, never inside one */
 
 /* ---------- Contact ---------- */
 .contact-card {
@@ -435,6 +463,11 @@ html:has(.game-modal[open]) { overflow: hidden; }
 .footer-top nav { display: flex; gap: 20px; }
 .footer-top nav a { color: var(--muted); font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .footer-top nav a:hover { color: var(--ink); }
+/* The help link reads as part of the note: same soft grey, a faint violet underline, violet on hover. */
+.footer-note .help { white-space: nowrap; }
+.footer-note .help a { display: inline-flex; align-items: center; gap: 2px; color: #c9c8d4; text-decoration: underline; text-decoration-color: rgba(157,139,255,.45); text-decoration-thickness: 1px; text-underline-offset: 4px; transition: color .2s, text-decoration-color .2s; }
+.footer-note .help a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.footer-note .help svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .footer-note { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: .75rem; margin: 0; }
 .age {
   /* Letter-spacing adds space after the last glyph, so the left padding gets the same extra to keep "18+" centred. */
@@ -464,6 +497,7 @@ html:has(.game-modal[open]) { overflow: hidden; }
   .nav-links.open { transform: none; }
   .nav-links a { padding: 18px 20px; border-top: 1px solid var(--line); font-size: .9rem; }
   .nav-links a::after { display: none; }
+  .nav-links a.is-current { color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
   .nav.menu-open { background: rgba(9,9,13,.97); }
   .stats { grid-template-columns: 1fr; gap: 12px; }
   .spot-card { grid-template-columns: 1fr; }

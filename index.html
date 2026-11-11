@@ -6,16 +6,43 @@
   <title>FEMBOTS | Slot Game Provider</title>
   <meta name="description" content="FEMBOTS is an independent slot provider making bold, art-first games for Engine and Stake. Our first game is Midnight Broker." />
   <meta name="theme-color" content="#09090d" />
+  <link rel="canonical" href="https://fembots-gaming.github.io/website/" />
   <link rel="icon" type="image/svg+xml" href="assets/robot.svg" />
-  <meta property="og:title" content="FEMBOTS | Slot Game Provider" />
-  <meta property="og:description" content="Bold, art-first slots for Engine and Stake. First up: Midnight Broker." />
-  <meta property="og:image" content="assets/mb/cover-wide.webp" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=65" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="preload" href="assets/fonts/bungee-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="styles.css?v=77" />
 </head>
 <body>
+  <!-- ============ 18+ CHECK ============ -->
+  <!-- Asked once per browser. The answer is kept in localStorage; if storage is blocked it asks on every visit. -->
+  <dialog class="age-gate" id="ageGate" closedby="none" aria-labelledby="ageTitle" aria-describedby="ageText">
+    <img src="assets/robot.svg" alt="" width="56" height="54" />
+    <h2 id="ageTitle">Are you 18 or older?</h2>
+    <p id="ageText">FEMBOTS makes casino games. You need to be 18 or older, and of legal gambling age where you live, to visit this site.</p>
+    <div class="age-actions">
+      <button class="btn btn-primary" type="button" id="ageYes">I'm 18 or older</button>
+      <a class="btn btn-ghost" href="https://www.google.com/" rel="noopener" id="ageNo">Leave</a>
+    </div>
+  </dialog>
+  <script>
+    (function () {
+      var KEY = 'fembots-age-ok', gate = document.getElementById('ageGate');
+      try { if (localStorage.getItem(KEY) === '1') return; } catch (e) {}
+      var ok = false;
+      gate.showModal();
+      // Escape doesn't let people skip it. If the browser closes it some other way, put it back.
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ok) e.preventDefault(); }, true);
+      gate.addEventListener('cancel', function (e) { e.preventDefault(); });
+      new MutationObserver(function () { if (!ok && !gate.open) gate.showModal(); }).observe(gate, { attributes: true, attributeFilter: ['open'] });
+      document.getElementById('ageYes').addEventListener('click', function () {
+        ok = true;
+        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+        gate.close();
+      });
+    })();
+  </script>
+
   <!-- ============ NAV ============ -->
   <header class="nav" id="top">
     <a class="brand" href="#top" aria-label="FEMBOTS home">
@@ -57,7 +84,7 @@
           <span class="glitch">FEMBOTS</span>
         </h1>
         <p class="hero-sub reveal">
-          An independent slot provider making games for Stake Engine. Three titles are in production now, each with its own characters, art and math.
+          An independent slot provider making games for Stake Engine. <span data-production>Two titles are</span> in production now, each with its own characters, art and math.
         </p>
         <div class="hero-cta reveal">
           <a class="btn btn-primary" href="#games">See our games</a>
@@ -70,15 +97,12 @@
 
     <!-- ============ TICKER ============ -->
     <div class="ticker" aria-hidden="true">
-      <div class="ticker-track">
-        <span>FEMBOTS</span><b>3 games in production</b><span>Ember Reign</span><span>Midnight Broker</span><span>Noble Seal</span><b>Built on Engine</b><b>Played on Stake</b>
-        <span>FEMBOTS</span><b>3 games in production</b><span>Ember Reign</span><span>Midnight Broker</span><span>Noble Seal</span><b>Built on Engine</b><b>Played on Stake</b>
-      </div>
+      <div class="ticker-track" id="tickerTrack"></div>
     </div>
 
     <!-- ============ STUDIO STATS ============ -->
     <section class="stats" id="studio-stats" aria-label="FEMBOTS in numbers">
-      <div class="stat reveal"><b data-count-games>3</b><span>Games in production</span></div>
+      <div class="stat reveal"><b data-count-games>2</b><span>Games in production</span></div>
       <div class="stat reveal"><b>Engine</b><span>Where we publish</span></div>
       <div class="stat reveal"><b>Stake</b><span>Where our games are played</span></div>
     </section>
@@ -132,9 +156,9 @@
           <p>Our games play in the browser on phones and desktops, wherever Stake runs.</p>
         </article>
       </div>
-      <div class="platforms">
-        <span>Built on</span><b>Engine</b><span class="dot">•</span><span>Played on</span><b>Stake</b>
-      </div>
+      <p class="platforms">
+        <span>Built on <b>Engine</b>.</span> <span>Played on <b>Stake</b>.</span>
+      </p>
     </section>
 
 
@@ -151,59 +175,9 @@
           <button class="spot-arrow" type="button" data-dir="1" aria-label="Next game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         </div>
       </div>
-      <!-- Both games sit in one grid cell, so the box is always as tall as the tallest game. -->
-      <div class="spot-stack">
-      <div class="spot-game" data-game="midnight-broker">
-      <article class="spot-card" id="midnight-broker">
-        <div class="spot-art">
-          <img src="assets/mb/cover-tall.webp" alt="The Night Broker, a masked ghost with a katana, in front of red lanterns" loading="lazy" />
-        </div>
-        <div class="spot-body">
-          <span class="tag tag-soon">Coming soon</span>
-          <img class="spot-logo" src="assets/mb/logo.webp" alt="Midnight Broker" loading="lazy" />
-          <p class="spot-lead">A 5×4 cluster slot in a lantern-lit night market. Every win lights its cells, and when the Night Broker lands, every lit lantern flips open for cash or a multiplier.</p>
-          <ul class="stat-chips">
-            <li><b>96.70%</b><span>RTP</span></li>
-            <li><b>10,000x</b><span>Max win</span></li>
-            <li><b>5×4</b><span>Cluster pays</span></li>
-            <li><b>7</b><span>Game modes</span></li>
-          </ul>
-          <ol class="mini-steps">
-            <li><b>Light the cells.</b> Winning clusters light the cells they sat on.</li>
-            <li><b>The Broker collects.</b> Lit lanterns reveal 0.2x to 500x, or ×2 and ×3 multipliers.</li>
-            <li><b>Break the seals.</b> 3, 4 or 5 Seals open the Regular, Super or Hidden bonus.</li>
-          </ol>
-          <button class="details-btn" type="button" data-details="midnight-broker" aria-label="Full game details" title="Full game details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="out-a" d="M14 4h6v6M20 4l-6 6"/><path class="out-b" d="M10 20H4v-6M4 20l6-6"/></svg></button>
-        </div>
-      </article>
-      </div>
-
-      <!-- Noble Seal (figures from noble-seal/src/game/rules.ts and its math) -->
-      <div class="spot-game is-hidden" data-game="noble-seal">
-      <article class="spot-card" id="noble-seal">
-        <div class="spot-art">
-          <img src="assets/ns/cover-tall.webp" alt="A seal in a knight's helmet and red cape, raising a sword over a market town at sunset" loading="lazy" />
-        </div>
-        <div class="spot-body">
-          <span class="tag tag-soon">Coming soon</span>
-          <img class="spot-logo" src="assets/ns/logo.webp" alt="Noble Seal" loading="lazy" />
-          <p class="spot-lead">A 6×5 lines slot in a storybook market town. Royal Seals fill whole reels with wilds and multipliers up to 1000x, and in free spins they stick and grow every spin.</p>
-          <ul class="stat-chips">
-            <li><b>96.70%</b><span>RTP</span></li>
-            <li><b>50,000x</b><span>Max win</span></li>
-            <li><b>25</b><span>Paylines</span></li>
-            <li><b>8</b><span>Game modes</span></li>
-          </ul>
-          <ol class="mini-steps">
-            <li><b>Line up 3 or more.</b> 3 to 6 of a symbol on a line, from the first reel, pay.</li>
-            <li><b>Land a Royal Seal.</b> It fills its reel with wilds and a 2x to 1000x multiplier. Lines through several add them up.</li>
-            <li><b>Collect FS scatters.</b> 3, 4 or 5 and more start the Royal, Super or Epic bonus.</li>
-          </ol>
-          <button class="details-btn" type="button" data-details="noble-seal" aria-label="Full game details" title="Full game details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="out-a" d="M14 4h6v6M20 4l-6 6"/><path class="out-b" d="M10 20H4v-6M4 20l6-6"/></svg></button>
-        </div>
-      </article>
-      </div>
-      </div>
+      <!-- main.js adds one panel per game marked "In review" in data/games.json. They share one grid cell,
+           so the box is always as tall as the tallest game. -->
+      <div class="spot-stack" id="spotStack"></div>
     </section>
 
 
@@ -224,7 +198,7 @@
     </section>
   </main>
 
-  <!-- Game details pop-up. main.js fills it from the game's spotlight card and its template below. -->
+  <!-- Game details pop-up. main.js fills it from data/games.json. -->
   <dialog class="game-modal" id="gameModal" aria-label="Game details">
     <div class="modal-top">
       <span class="modal-title"></span>
@@ -235,105 +209,6 @@
     <div class="modal-body"></div>
   </dialog>
 
-  <!-- Full details for each game, shown in the pop-up. -->
-  <template id="details-midnight-broker">
-      <!-- Symbols -->
-      <h3 class="sub">The symbols</h3>
-      <ul class="symbols">
-        <li><img src="assets/mb/H4_tessen.webp" alt="" loading="lazy" /><span>War Fan</span><small>up to 75x</small></li>
-        <li><img src="assets/mb/H3_katana.webp" alt="" loading="lazy" /><span>Katana</span><small>up to 40x</small></li>
-        <li><img src="assets/mb/H2_bonsai.webp" alt="" loading="lazy" /><span>Bonsai</span><small>up to 25x</small></li>
-        <li><img src="assets/mb/H1_crane.webp" alt="" loading="lazy" /><span>Crane</span><small>up to 15x</small></li>
-        <li class="special"><img src="assets/mb/W_chest.webp" alt="" loading="lazy" /><span>Treasure Chest</span><small>Wild</small></li>
-        <li class="special"><img src="assets/mb/token_lantern_gold.webp" alt="" loading="lazy" /><span>Gold Lantern</span><small>Multiplier</small></li>
-      </ul>
-
-      <!-- Bonuses + modes -->
-      <div class="two-col">
-        <div>
-          <h3 class="sub">Bonus rounds</h3>
-          <div class="bonus-list">
-            <article class="bonus">
-              <div class="bonus-seals"><b>3</b><span>Seals</span></div>
-              <div><h4>Regular Bonus</h4><p>8 spins. Lit cells stay lit for the whole bonus. 3 Seals add 4 more spins.</p></div>
-            </article>
-            <article class="bonus">
-              <div class="bonus-seals"><b>4</b><span>Seals</span></div>
-              <div><h4>Super Bonus</h4><p>10 spins with 6 cells lit from the start, and every collection pays at least ×3.</p></div>
-            </article>
-            <article class="bonus bonus-hidden">
-              <div class="bonus-seals"><b>5</b><span>Seals</span></div>
-              <div><h4>Hidden Bonus</h4><p>10 spins with 4 cells lit from the start. Reached only with 5 Seals or from a Mystery Bonus.</p></div>
-            </article>
-          </div>
-        </div>
-        <div>
-          <h3 class="sub">Game modes</h3>
-          <table class="modes">
-            <thead><tr><th>Mode</th><th>Cost</th></tr></thead>
-            <tbody>
-              <tr><td>Base game</td><td>1x</td></tr>
-              <tr><td>Extra Chance <small>Bonuses about 1.7× as often</small></td><td>1.25x</td></tr>
-              <tr><td>Feature Spins <small>The Broker on every board, 2 cells lit</small></td><td>5x</td></tr>
-              <tr><td>Moonlit Spins <small>All 20 cells lit, every collect at least ×10</small></td><td>500x</td></tr>
-              <tr><td>Regular Bonus</td><td>100x</td></tr>
-              <tr><td>Mystery Bonus <small>Regular, Super or Hidden</small></td><td>200x</td></tr>
-              <tr><td>Super Bonus</td><td>400x</td></tr>
-            </tbody>
-          </table>
-          <p class="fine">Figures are from the current math build and may change before release. Some modes are not available in every jurisdiction.</p>
-        </div>
-      </div>
-  </template>
-  <template id="details-noble-seal">
-      <h3 class="sub">The symbols</h3>
-      <ul class="symbols">
-        <li><img src="assets/ns/H1.webp" alt="" loading="lazy" /><span>Crown</span><small>up to 30x</small></li>
-        <li><img src="assets/ns/H2.webp" alt="" loading="lazy" /><span>Knight's Helmet</span><small>up to 24x</small></li>
-        <li><img src="assets/ns/H3.webp" alt="" loading="lazy" /><span>Golden Chalice</span><small>up to 20x</small></li>
-        <li><img src="assets/ns/H4.webp" alt="" loading="lazy" /><span>Fleur-de-lis Shield</span><small>up to 16x</small></li>
-        <li class="special"><img src="assets/ns/W.webp" alt="" loading="lazy" /><span>Treasure Chest</span><small>Wild</small></li>
-        <li class="special"><img src="assets/ns/seal.webp" alt="" loading="lazy" /><span>Royal Seal</span><small>Wild reel, up to 1000x</small></li>
-      </ul>
-
-      <div class="two-col">
-        <div>
-          <h3 class="sub">Bonus rounds</h3>
-          <div class="bonus-list">
-            <article class="bonus">
-              <div class="bonus-seals"><b>3</b><span>FS</span></div>
-              <div><h4>Royal Seal Spins</h4><p>10 free spins on a clear board. Royal Seals that land stick to their reels and grow +1 every spin.</p></div>
-            </article>
-            <article class="bonus">
-              <div class="bonus-seals"><b>4</b><span>FS</span></div>
-              <div><h4>Super Royal Seal Spins</h4><p>12 free spins, starting with a Royal Seal locked in place.</p></div>
-            </article>
-            <article class="bonus bonus-hidden">
-              <div class="bonus-seals"><b>5+</b><span>FS</span></div>
-              <div><h4>Epic Royal Seal Spins</h4><p>12 free spins, starting with 2 Royal Seals locked in place.</p></div>
-            </article>
-          </div>
-          <p class="fine">3 or more FS scatters during a bonus add 5 more free spins.</p>
-        </div>
-        <div>
-          <h3 class="sub">Game modes</h3>
-          <table class="modes">
-            <thead><tr><th>Mode</th><th>Cost</th></tr></thead>
-            <tbody>
-              <tr><td>Base game</td><td>1x</td></tr>
-              <tr><td>Extra Chance <small>A much better chance of a bonus</small></td><td>3x</td></tr>
-              <tr><td>Super Chance <small>A better chance of Super or Epic</small></td><td>6x</td></tr>
-              <tr><td>Epic Chance <small>A better chance of Epic</small></td><td>20x</td></tr>
-              <tr><td>Feature Spin <small>3 Royal Seals of 10x or more on every spin</small></td><td>1000x</td></tr>
-              <tr><td>Royal Seal Spins</td><td>100x</td></tr>
-              <tr><td>Super Buy</td><td>300x</td></tr>
-              <tr><td>Mystery <small>No feature, Super or Epic</small></td><td>500x</td></tr>
-            </tbody>
-          </table>
-          <p class="fine">Figures are from the current math build and may change before release. Some modes are not available in every jurisdiction.</p>
-        </div>
-      </div>
-  </template>
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
@@ -347,12 +222,12 @@
     </div>
     <p class="footer-note">
       <span class="age">18+</span>
-      Our games are for adults only. Play responsibly, and only where gambling is legal for you.
+      <span>Our games are for adults only. Play responsibly, and only where gambling is legal for you.
+        <span class="help">Need help? <a href="https://www.begambleaware.org/" target="_blank" rel="noopener">BeGambleAware.org<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9 8h7v7"/></svg></a></span></span>
     </p>
     <p class="footer-copy">© <span id="year">2026</span> FEMBOTS. All rights reserved.</p>
   </footer>
 
-  <script src="games.js?v=65"></script>
-  <script src="main.js?v=65"></script>
+  <script src="main.js?v=77"></script>
 </body>
 </html>

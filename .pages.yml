@@ -1,0 +1,173 @@
+# Pages CMS (https://pagescms.org) edits the games through this file.
+# Only people with write access to this GitHub repo can sign in and save.
+media:
+  input: assets
+  output: assets
+
+content:
+  - name: games
+    label: Games
+    type: file
+    path: data/games.json
+    format: json
+    fields:
+      - name: games
+        label: Games
+        description: Shown on the site in this order. Drag to reorder.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          # ----- The game card -----
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: slug
+            label: Slug
+            description: Short id for links, e.g. noble-seal. Lowercase letters, numbers and dashes.
+            type: string
+            required: true
+          - name: status
+            label: Status
+            type: select
+            options:
+              values:
+                - value: coming-soon
+                  label: Coming soon
+                - value: released
+                  label: Released
+          - name: inReview
+            label: In review (show under "Up next")
+            type: boolean
+          - name: release
+            label: Tag text
+            description: Shown on the card while it is not released, e.g. "Coming soon" or "June 2027".
+            type: string
+          - name: playUrl
+            label: Play link
+            description: The Stake link, once it is live. Only used when the status is Released.
+            type: string
+          - name: cover
+            label: Cover art (tall)
+            type: image
+          - name: coverAlt
+            label: Cover art description
+            description: What the cover shows, for screen readers.
+            type: string
+          - name: logo
+            label: Logo
+            type: image
+          - name: blurb
+            label: Card description
+            type: text
+          - name: rtp
+            label: RTP
+            description: e.g. 96.70%
+            type: string
+          - name: maxWin
+            label: Max win
+            description: e.g. 10,000x
+            type: string
+          - name: grid
+            label: Grid
+            description: e.g. 5×4 Cluster
+            type: string
+
+          # ----- Up next (spotlight) -----
+          - name: lead
+            label: Spotlight description
+            description: Leave empty to reuse the card description.
+            type: text
+          - name: chips
+            label: Spotlight stats
+            type: object
+            list: true
+            fields:
+              - name: value
+                label: Value
+                type: string
+              - name: label
+                label: Label
+                type: string
+          - name: steps
+            label: How it plays (spotlight steps)
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: Bold start
+                type: string
+              - name: text
+                label: Rest of the line
+                type: string
+
+          # ----- Details pop-up -----
+          - name: symbols
+            label: Symbols
+            type: object
+            list: true
+            fields:
+              - name: image
+                label: Image
+                type: image
+              - name: name
+                label: Name
+                type: string
+              - name: pay
+                label: Pay or role
+                description: e.g. "up to 75x" or "Wild"
+                type: string
+              - name: special
+                label: Special symbol (violet text)
+                type: boolean
+          - name: bonuses
+            label: Bonus rounds
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: Name
+                type: string
+              - name: trigger
+                label: Trigger number
+                description: e.g. 3 or 5+
+                type: string
+              - name: triggerLabel
+                label: Trigger label
+                description: e.g. Seals or FS
+                type: string
+              - name: text
+                label: Description
+                type: text
+              - name: highlight
+                label: Highlight (red)
+                type: boolean
+          - name: bonusNote
+            label: Note under the bonus rounds
+            type: string
+          - name: modes
+            label: Game modes
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: Mode
+                type: string
+              - name: note
+                label: Small note
+                type: string
+              - name: cost
+                label: Cost
+                description: e.g. 100x
+                type: string
+          - name: finePrint
+            label: Fine print
+            type: text
+
+      - name: contactEmail
+        label: Contact email
+        description: Shows an "Email us" button in the Partners section. Leave empty to hide it.
+        type: string
